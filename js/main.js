@@ -32,6 +32,7 @@ let currentArticleId = null;
 // 初始化
 // ===========================
 document.addEventListener('DOMContentLoaded', async () => {
+    initThemeToggle();
     initSidebarToggle();
     await Promise.all([
         loadArticleList(),
@@ -39,6 +40,35 @@ document.addEventListener('DOMContentLoaded', async () => {
     ]);
     handleInitialRoute();
 });
+
+// ===========================
+// 主题切换（白天 / 黑夜）
+// ===========================
+function initThemeToggle() {
+    const toggleBtn = document.getElementById('themeToggle');
+    const iconEl = document.getElementById('themeIcon');
+    if (!toggleBtn) return;
+
+    // 从 localStorage 恢复主题，默认白天
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        if (iconEl) iconEl.textContent = '☀️';
+    }
+
+    toggleBtn.addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+        if (isDark) {
+            document.documentElement.removeAttribute('data-theme');
+            if (iconEl) iconEl.textContent = '🌙';
+            localStorage.setItem('theme', 'light');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            if (iconEl) iconEl.textContent = '☀️';
+            localStorage.setItem('theme', 'dark');
+        }
+    });
+}
 
 // ===========================
 // 侧栏折叠/展开

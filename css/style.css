@@ -23,6 +23,25 @@
     --transition: 0.2s ease;
 }
 
+/* 暗色主题 */
+[data-theme="dark"] {
+    --color-bg: #1a1a2e;
+    --color-sidebar: #16213e;
+    --color-sidebar-hover: #1a2744;
+    --color-sidebar-active: #0f172a;
+    --color-topbar: #1e1e30;
+    --color-primary: #5dade2;
+    --color-primary-dark: #85c1e9;
+    --color-text: #e0e0e0;
+    --color-text-light: #a0a0a0;
+    --color-text-sidebar: #ecf0f1;
+    --color-border: #3a3a4a;
+    --color-card: #222240;
+    --color-code-bg: #2a2a3e;
+    --shadow-topbar: 0 2px 8px rgba(0,0,0,0.3);
+    --shadow-card: 0 2px 12px rgba(0,0,0,0.2);
+}
+
 * {
     margin: 0;
     padding: 0;
@@ -107,10 +126,43 @@ a:hover {
     background: rgba(52, 152, 219, 0.08);
 }
 
-/* 顶栏右侧：GitHub */
+/* 顶栏右侧：主题切换 + GitHub */
 .topbar-right {
     display: flex;
     align-items: center;
+    gap: 4px;
+}
+
+/* 主题切换按钮 */
+.theme-toggle {
+    width: 36px;
+    height: 36px;
+    border: none;
+    background: transparent;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    transition: all var(--transition);
+}
+
+.theme-toggle:hover {
+    background: #f0f0f0;
+}
+
+[data-theme="dark"] .theme-toggle:hover {
+    background: #3a3a3a;
+}
+
+.theme-icon {
+    line-height: 1;
+    transition: transform 0.4s ease;
+}
+
+.theme-toggle:hover .theme-icon {
+    transform: rotate(20deg);
 }
 
 .github-link {
@@ -453,6 +505,30 @@ body.sidebar-collapsed .main-content {
 
 .sidebar::-webkit-scrollbar-thumb:hover {
     background: rgba(255,255,255,0.25);
+}
+
+/* ===========================
+   暗色主题细粒度覆盖
+   =========================== */
+[data-theme="dark"] .github-link:hover {
+    background: #3a3a4a;
+}
+
+[data-theme="dark"] .markdown-body blockquote {
+    background: #1e2d3d;
+    color: #b0c4de;
+}
+
+[data-theme="dark"] .markdown-body code {
+    color: #f0a0a0;
+}
+
+[data-theme="dark"] .markdown-body pre {
+    background: #12121f;
+}
+
+[data-theme="dark"] .markdown-body th {
+    background: #2a2a3e;
 }
 
 /* ===========================
