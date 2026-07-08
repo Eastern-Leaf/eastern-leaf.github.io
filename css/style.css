@@ -97,6 +97,50 @@ a:hover {
     display: flex;
     align-items: center;
     gap: 24px;
+    flex-shrink: 0;
+}
+
+/* 移动端汉堡菜单按钮（桌面端隐藏） */
+.hamburger-btn {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 6px;
+    border-radius: 6px;
+    transition: background var(--transition);
+}
+
+.hamburger-btn:hover {
+    background: rgba(0,0,0,0.06);
+}
+
+.hamburger-btn span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--color-text);
+    border-radius: 2px;
+    transition: all 0.3s ease;
+}
+
+/* 汉堡按钮激活态 → X */
+body.sidebar-open .hamburger-btn span:nth-child(1) {
+    transform: translateY(7px) rotate(45deg);
+}
+
+body.sidebar-open .hamburger-btn span:nth-child(2) {
+    opacity: 0;
+}
+
+body.sidebar-open .hamburger-btn span:nth-child(3) {
+    transform: translateY(-7px) rotate(-45deg);
 }
 
 .blog-title {
@@ -202,6 +246,101 @@ a:hover {
 
 .github-link:hover .github-avatar {
     border-color: var(--color-primary);
+}
+
+/* 顶栏中间：搜索框 */
+.topbar-center {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding: 0 24px;
+    max-width: 360px;
+    margin: 0 auto;
+}
+
+.search-box {
+    position: relative;
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 12px;
+    font-size: 0.85rem;
+    pointer-events: none;
+    opacity: 0.5;
+    transition: opacity var(--transition);
+}
+
+.search-box:focus-within .search-icon {
+    opacity: 1;
+}
+
+.search-input {
+    width: 100%;
+    padding: 7px 32px 7px 34px;
+    border: 1px solid var(--color-border);
+    border-radius: 20px;
+    font-size: 0.85rem;
+    background: var(--color-bg);
+    color: var(--color-text);
+    outline: none;
+    transition: all var(--transition);
+}
+
+.search-input::placeholder {
+    color: var(--color-text-light);
+    opacity: 0.6;
+}
+
+.search-input:focus {
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.12);
+    background: var(--color-card);
+}
+
+.search-clear {
+    position: absolute;
+    right: 8px;
+    width: 22px;
+    height: 22px;
+    border: none;
+    background: transparent;
+    color: var(--color-text-light);
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all var(--transition);
+}
+
+.search-clear:hover {
+    background: var(--color-border);
+    color: var(--color-text);
+}
+
+/* 侧栏文章计数 */
+.sidebar-count {
+    font-size: 0.75rem;
+    opacity: 0.45;
+    margin-left: 4px;
+}
+
+/* 搜索高亮 */
+.search-highlight {
+    background: #fde68a;
+    color: #000;
+    border-radius: 2px;
+    padding: 0 1px;
+}
+
+[data-theme="dark"] .search-highlight {
+    background: #b8960f;
+    color: #fff;
 }
 
 /* ===========================
@@ -508,6 +647,20 @@ body.sidebar-collapsed .main-content {
 }
 
 /* ===========================
+   侧栏遮罩层（移动端）—— 桌面端隐藏
+   =========================== */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 40;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+}
+
+/* ===========================
    暗色主题细粒度覆盖
    =========================== */
 [data-theme="dark"] .github-link:hover {
@@ -531,14 +684,29 @@ body.sidebar-collapsed .main-content {
     background: #2a2a3e;
 }
 
+[data-theme="dark"] .search-input:focus {
+    box-shadow: 0 0 0 3px rgba(93, 173, 226, 0.15);
+}
+
+[data-theme="dark"] .hamburger-btn:hover {
+    background: rgba(255,255,255,0.08);
+}
+
 /* ===========================
-   响应式
+   响应式：平板及以下 (≤860px)
    =========================== */
-@media (max-width: 768px) {
-    .topbar-left {
-        gap: 12px;
+@media (max-width: 860px) {
+    /* 显示汉堡按钮 */
+    .hamburger-btn {
+        display: flex;
     }
 
+    /* 桌面端折叠按钮隐藏 */
+    .sidebar-toggle {
+        display: none;
+    }
+
+    /* 顶栏精简 */
     .topbar-nav {
         display: none;
     }
@@ -547,17 +715,56 @@ body.sidebar-collapsed .main-content {
         display: none;
     }
 
-    .sidebar {
-        width: 100%;
-        position: relative;
-        top: 0;
-        height: auto;
-        max-height: 40vh;
+    .blog-title {
+        font-size: 1.1rem;
     }
 
+    /* 搜索框缩小 */
+    .topbar-center {
+        padding: 0 12px;
+        max-width: 240px;
+    }
+
+    .search-input {
+        font-size: 0.8rem;
+        padding: 6px 28px 6px 30px;
+    }
+
+    /* === 侧栏变为滑入式覆盖层 === */
+    .sidebar-overlay {
+        display: block;
+    }
+
+    body.sidebar-open .sidebar-overlay {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        z-index: 90;
+        box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+    }
+
+    body.sidebar-open .sidebar {
+        transform: translateX(0);
+    }
+
+    /* 主内容区全宽 */
     .main-content {
         margin-left: 0;
         padding: 20px 16px;
+    }
+
+    body.sidebar-collapsed .main-content {
+        margin-left: 0;
+    }
+
+    /* 侧栏内部添加关闭按钮区域（顶部留出空间） */
+    .sidebar-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
     }
 
     .article {
@@ -566,5 +773,78 @@ body.sidebar-collapsed .main-content {
 
     .article-title {
         font-size: 1.4rem;
+    }
+}
+
+/* ===========================
+   响应式：手机 (≤480px)
+   =========================== */
+@media (max-width: 480px) {
+    :root {
+        --topbar-height: 52px;
+        --sidebar-width: 280px;
+    }
+
+    .topbar-inner {
+        padding: 0 12px;
+    }
+
+    .topbar-left {
+        gap: 10px;
+    }
+
+    .blog-title {
+        font-size: 1rem;
+    }
+
+    /* 搜索框在小屏进一步缩小 */
+    .topbar-center {
+        padding: 0 8px;
+        max-width: none;
+        flex: 1;
+    }
+
+    .search-input {
+        font-size: 0.78rem;
+        padding: 5px 26px 5px 28px;
+    }
+
+    .main-content {
+        padding: 16px 12px;
+    }
+
+    .article {
+        padding: 16px;
+    }
+
+    .article-title {
+        font-size: 1.25rem;
+    }
+
+    .markdown-body {
+        font-size: 0.92rem;
+    }
+
+    .markdown-body h2 {
+        font-size: 1.25rem;
+    }
+
+    .markdown-body h3 {
+        font-size: 1.1rem;
+    }
+
+    .theme-toggle {
+        width: 32px;
+        height: 32px;
+        font-size: 1rem;
+    }
+
+    .github-link {
+        padding: 4px 6px;
+    }
+
+    .github-avatar {
+        width: 28px;
+        height: 28px;
     }
 }

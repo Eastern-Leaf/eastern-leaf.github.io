@@ -14,11 +14,22 @@
     <header class="topbar">
         <div class="topbar-inner">
             <div class="topbar-left">
+                <!-- 移动端汉堡菜单按钮 -->
+                <button class="hamburger-btn" id="hamburgerBtn" title="菜单" aria-label="打开菜单">
+                    <span></span><span></span><span></span>
+                </button>
                 <h1 class="blog-title">Eastern-Leaf的博客</h1>
                 <nav class="topbar-nav">
                     <a href="#" class="nav-link active" data-nav="home">首页</a>
                     <a href="#" class="nav-link" data-nav="about">关于</a>
                 </nav>
+            </div>
+            <div class="topbar-center">
+                <div class="search-box" id="searchBox">
+                    <span class="search-icon">🔍</span>
+                    <input type="text" class="search-input" id="searchInput" placeholder="搜索文章...">
+                    <button class="search-clear" id="searchClear" title="清除" style="display:none;">✕</button>
+                </div>
             </div>
             <div class="topbar-right">
                 <button class="theme-toggle" id="themeToggle" title="切换主题">
@@ -32,10 +43,14 @@
         </div>
     </header>
 
+    <!-- 移动端侧栏遮罩 -->
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <!-- 左侧栏 -->
     <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h2>文章列表</h2>
+            <span class="sidebar-count" id="sidebarCount"></span>
         </div>
         <ul class="article-list" id="articleList">
             <!-- JS 动态填充 -->

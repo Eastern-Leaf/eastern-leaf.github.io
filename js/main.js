@@ -34,6 +34,8 @@ let currentArticleId = null;
 document.addEventListener('DOMContentLoaded', async () => {
     initThemeToggle();
     initSidebarToggle();
+    initMobileSidebar();
+    initSearch();
     await Promise.all([
         loadArticleList(),
         loadGitHubProfile(),
@@ -92,6 +94,84 @@ function initSidebarToggle() {
 }
 
 // ===========================
+// 移动端侧栏（汉堡菜单 + 遮罩点击关闭）
+// ===========================
+function initMobileSidebar() {
+    const hamburgerBtn = document.getElementById('hamburgerBtn');
+    const overlay = document.getElementById('sidebarOverlay');
+
+    if (!hamburgerBtn) return;
+
+    function openSidebar() {
+        document.body.classList.add('sidebar-open');
+    }
+
+    function closeSidebar() {
+        document.body.classList.remove('sidebar-open');
+    }
+
+    hamburgerBtn.addEventListener('click', () => {
+        document.body.classList.contains('sidebar-open') ? closeSidebar() : openSidebar();
+    });
+
+    if (overlay) {
+        overlay.addEventListener('click', closeSidebar);
+    }
+
+    // 选择文章后自动关闭侧栏
+    articleListEl.addEventListener('click', (e) => {
+        if (e.target.closest('a[data-id]')) {
+            if (window.innerWidth <= 860) {
+                closeSidebar();
+            }
+        }
+    });
+
+    // 窗口变大时清除移动端状态
+    window.addEventListener('resize', () => {
+        if (window.innerWidth > 860) {
+            closeSidebar();
+        }
+    });
+}
+
+// ===========================
+// 搜索文章
+// ===========================
+function initSearch() {
+    const searchInput = document.getElementById('searchInput');
+    const searchClear = document.getElementById('searchClear');
+    if (!searchInput) return;
+
+    searchInput.addEventListener('input', () => {
+        const query = searchInput.value.trim().toLowerCase();
+        if (searchClear) {
+            searchClear.style.display = query ? '' : 'none';
+        }
+        renderArticleList(query);
+    });
+
+    if (searchClear) {
+        searchClear.addEventListener('click', () => {
+            searchInput.value = '';
+            searchClear.style.display = 'none';
+            renderArticleList('');
+            searchInput.focus();
+        });
+    }
+
+    // Escape 键清除搜索
+    searchInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            searchInput.value = '';
+            if (searchClear) searchClear.style.display = 'none';
+            renderArticleList('');
+            searchInput.blur();
+        }
+    });
+}
+
+// ===========================
 // 加载 GitHub 用户信息
 // ===========================
 async function loadGitHubProfile() {
@@ -145,19 +225,36 @@ async function loadArticleList() {
 // ===========================
 // 渲染左侧文章列表
 // ===========================
-function renderArticleList() {
-    if (articles.length === 0) {
+function renderArticleList(query = '') {
+    const countEl = document.getElementById('sidebarCount');
+
+    // 过滤
+    const filtered = query
+        ? articles.filter(a =>
+            a.title.toLowerCase().includes(query) ||
+            (a.tags || []).some(t => t.toLowerCase().includes(query))
+        )
+        : articles;
+
+    // 计数
+    if (countEl) {
+        countEl.textContent = query
+            ? `（${filtered.length}/${articles.length}）`
+            : `（${articles.length}）`;
+    }
+
+    if (filtered.length === 0) {
         articleListEl.innerHTML = `
             <li style="padding:20px;color:rgba(255,255,255,0.5);font-size:0.85rem;">
-                📭 暂无文章
+                ${query ? '🔍 没有匹配的文章' : '📭 暂无文章'}
             </li>`;
         return;
     }
 
-    articleListEl.innerHTML = articles.map((article, index) => `
+    articleListEl.innerHTML = filtered.map((article, index) => `
         <li>
             <a data-id="${article.id}" data-index="${index}" class="${article.id === currentArticleId ? 'active' : ''}">
-                ${article.title}
+                ${highlightMatch(article.title, query)}
                 <span class="article-date">${formatDate(article.date)}</span>
             </a>
         </li>
@@ -171,6 +268,16 @@ function renderArticleList() {
             loadArticle(id);
         });
     });
+}
+
+// ===========================
+// 搜索关键词高亮
+// ===========================
+function highlightMatch(text, query) {
+    if (!query) return text;
+    const escaped = query.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`(${escaped})`, 'gi');
+    return text.replace(regex, '<mark class="search-highlight">$1</mark>');
 }
 
 // ===========================
