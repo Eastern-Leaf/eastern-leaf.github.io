@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>我的博客</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- Markdown 解析库 -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+<body>
+    <!-- 顶栏 -->
+    <header class="topbar">
+        <div class="topbar-inner">
+            <h1 class="blog-title">📝 我的博客</h1>
+            <nav class="topbar-nav">
+                <a href="#" class="nav-link active" data-nav="home">首页</a>
+                <a href="#" class="nav-link" data-nav="about">关于</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 左侧栏 -->
+    <aside class="sidebar">
+        <div class="sidebar-header">
+            <h2>文章列表</h2>
+        </div>
+        <ul class="article-list" id="articleList">
+            <!-- JS 动态填充 -->
+        </ul>
+        <div class="sidebar-footer">
+            <p>📂 在 <code>resource/</code> 文件夹中添加 .md 文件</p>
+        </div>
+    </aside>
+
+    <!-- 主内容区 -->
+    <main class="main-content" id="mainContent">
+        <div class="welcome" id="welcome">
+            <h2>👋 欢迎来到我的博客</h2>
+            <p>请从左侧选择一篇文章阅读。</p>
+        </div>
+        <article class="article" id="article" style="display:none;">
+            <header class="article-header">
+                <h2 class="article-title" id="articleTitle"></h2>
+                <div class="article-meta" id="articleMeta"></div>
+            </header>
+            <div class="article-body markdown-body" id="articleBody"></div>
+        </article>
+    </main>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
