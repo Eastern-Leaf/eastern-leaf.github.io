@@ -12,6 +12,12 @@
         "date": "2026-07-08",
         "file": "articles/markdown-guide.md",
         "tags": ["教程", "Markdown"]
+    },
+    {
+        "id": "thoughts-on-learning",
+        "title": "对于学习的思考",
+        "date": "2026-07-08",
+        "file": "articles/对于学习的思考.md",
+        "tags": ["随笔", "学习"]
     }
-    
 ]
