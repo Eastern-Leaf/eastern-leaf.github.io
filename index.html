@@ -12,16 +12,24 @@
     <!-- 顶栏 -->
     <header class="topbar">
         <div class="topbar-inner">
-            <h1 class="blog-title">📝 我的博客</h1>
-            <nav class="topbar-nav">
-                <a href="#" class="nav-link active" data-nav="home">首页</a>
-                <a href="#" class="nav-link" data-nav="about">关于</a>
-            </nav>
+            <div class="topbar-left">
+                <h1 class="blog-title">📝 我的博客</h1>
+                <nav class="topbar-nav">
+                    <a href="#" class="nav-link active" data-nav="home">首页</a>
+                    <a href="#" class="nav-link" data-nav="about">关于</a>
+                </nav>
+            </div>
+            <div class="topbar-right">
+                <a href="https://github.com/Eastern-Leaf" target="_blank" rel="noopener" class="github-link" title="GitHub">
+                    <span class="github-username" id="githubUsername">Eastern-Leaf</span>
+                    <img class="github-avatar" id="githubAvatar" src="" alt="GitHub Avatar">
+                </a>
+            </div>
         </div>
     </header>
 
     <!-- 左侧栏 -->
-    <aside class="sidebar">
+    <aside class="sidebar" id="sidebar">
         <div class="sidebar-header">
             <h2>文章列表</h2>
         </div>
@@ -32,6 +40,9 @@
             <p>📂 在 <code>resource/</code> 文件夹中添加 .md 文件</p>
         </div>
     </aside>
+
+    <!-- 侧栏折叠按钮 -->
+    <button class="sidebar-toggle" id="sidebarToggle" title="折叠/展开侧栏">◀</button>
 
     <!-- 主内容区 -->
     <main class="main-content" id="mainContent">

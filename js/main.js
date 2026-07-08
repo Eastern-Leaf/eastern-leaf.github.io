@@ -8,7 +8,7 @@
 // ===========================
 const CONFIG = {
     articleListUrl: 'resource/article-list.json',  // 文章索引文件
-    articleDir: 'resource/',                        // 文章存放目录
+    articleDir: 'resource/',                        // 文章根目录（file 字段已含子目录）
 };
 
 // ===========================
@@ -32,9 +32,64 @@ let currentArticleId = null;
 // 初始化
 // ===========================
 document.addEventListener('DOMContentLoaded', async () => {
-    await loadArticleList();
+    initSidebarToggle();
+    await Promise.all([
+        loadArticleList(),
+        loadGitHubProfile(),
+    ]);
     handleInitialRoute();
 });
+
+// ===========================
+// 侧栏折叠/展开
+// ===========================
+function initSidebarToggle() {
+    const toggleBtn = document.getElementById('sidebarToggle');
+    if (!toggleBtn) return;
+
+    // 从 localStorage 恢复折叠状态
+    const collapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+    if (collapsed) {
+        document.body.classList.add('sidebar-collapsed');
+        toggleBtn.innerHTML = '▶';
+    }
+
+    toggleBtn.addEventListener('click', () => {
+        const isCollapsed = document.body.classList.toggle('sidebar-collapsed');
+        toggleBtn.innerHTML = isCollapsed ? '▶' : '◀';
+        localStorage.setItem('sidebarCollapsed', isCollapsed);
+    });
+}
+
+// ===========================
+// 加载 GitHub 用户信息
+// ===========================
+async function loadGitHubProfile() {
+    const username = 'Eastern-Leaf';
+    const avatarEl = document.getElementById('githubAvatar');
+    const usernameEl = document.getElementById('githubUsername');
+
+    try {
+        const response = await fetch(`https://api.github.com/users/${username}`);
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        const data = await response.json();
+
+        if (avatarEl) {
+            avatarEl.src = data.avatar_url;
+            avatarEl.alt = `${data.login}的头像`;
+        }
+        if (usernameEl) {
+            usernameEl.textContent = data.login;
+        }
+    } catch (err) {
+        console.error('加载 GitHub 用户信息失败:', err);
+        // 降级：使用默认头像
+        if (avatarEl) {
+            avatarEl.src = `https://github.com/${username}.png`;
+            avatarEl.alt = `${username}的头像`;
+        }
+    }
+}
 
 // ===========================
 // 加载文章列表

@@ -67,12 +67,17 @@ a:hover {
 
 .topbar-inner {
     width: 100%;
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 28px;
     display: flex;
     align-items: center;
     justify-content: space-between;
+}
+
+/* 顶栏左侧：标题 + 导航 */
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 24px;
 }
 
 .blog-title {
@@ -80,6 +85,7 @@ a:hover {
     font-weight: 700;
     color: var(--color-text);
     letter-spacing: 0.5px;
+    white-space: nowrap;
 }
 
 .topbar-nav {
@@ -101,6 +107,51 @@ a:hover {
     background: rgba(52, 152, 219, 0.08);
 }
 
+/* 顶栏右侧：GitHub */
+.topbar-right {
+    display: flex;
+    align-items: center;
+}
+
+.github-link {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    text-decoration: none;
+    color: var(--color-text);
+    transition: all var(--transition);
+}
+
+.github-link:hover {
+    background: #f0f0f0;
+    color: var(--color-text);
+}
+
+.github-username {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text-light);
+}
+
+.github-link:hover .github-username {
+    color: var(--color-text);
+}
+
+.github-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 2px solid var(--color-border);
+    transition: border-color var(--transition);
+    object-fit: cover;
+}
+
+.github-link:hover .github-avatar {
+    border-color: var(--color-primary);
+}
+
 /* ===========================
    左侧栏
    =========================== */
@@ -116,6 +167,34 @@ a:hover {
     display: flex;
     flex-direction: column;
     z-index: 50;
+    transition: transform 0.3s ease;
+}
+
+/* 侧栏折叠按钮 */
+.sidebar-toggle {
+    position: fixed;
+    top: calc(var(--topbar-height) + 12px);
+    left: calc(var(--sidebar-width) - 12px);
+    width: 28px;
+    height: 28px;
+    background: var(--color-sidebar);
+    color: var(--color-text-sidebar);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 60;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    transition: all 0.3s ease;
+    padding: 0;
+    line-height: 1;
+}
+
+.sidebar-toggle:hover {
+    background: var(--color-sidebar-hover);
+    border-color: var(--color-primary);
 }
 
 .sidebar-header {
@@ -194,6 +273,20 @@ a:hover {
     min-height: calc(100vh - var(--topbar-height));
     padding: 32px 40px;
     max-width: 900px;
+    transition: margin-left 0.3s ease;
+}
+
+/* 侧栏折叠时主内容区展开 */
+body.sidebar-collapsed .sidebar {
+    transform: translateX(calc(-1 * var(--sidebar-width)));
+}
+
+body.sidebar-collapsed .sidebar-toggle {
+    left: 8px;
+}
+
+body.sidebar-collapsed .main-content {
+    margin-left: 0;
 }
 
 .welcome {
@@ -366,6 +459,18 @@ a:hover {
    响应式
    =========================== */
 @media (max-width: 768px) {
+    .topbar-left {
+        gap: 12px;
+    }
+
+    .topbar-nav {
+        display: none;
+    }
+
+    .github-username {
+        display: none;
+    }
+
     .sidebar {
         width: 100%;
         position: relative;

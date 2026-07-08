@@ -25,7 +25,11 @@ css/style.css       → 所有样式，CSS 变量集中在 :root 中
 js/main.js          → 唯一 JS 文件，负责全部交互逻辑
 resource/
   article-list.json → 文章索引，手动维护
-  *.md              → 文章源文件
+  articles/         → Markdown 文章（*.md）
+  images/           → 图片资源
+  audio/            → 音频资源
+  video/            → 视频资源
+  files/            → 其他附件（PDF、压缩包等）
 ```
 
 ## 数据流
@@ -38,20 +42,29 @@ resource/
 
 ## 发布文章流程
 
-1. 在 `resource/` 下新建 `.md` 文件，写入文章内容
+1. 在 `resource/articles/` 下新建 `.md` 文件，写入文章内容
 2. 编辑 `resource/article-list.json`，添加一条记录：
 
 ```json
 {
-    "id": "url-slug",        // 唯一标识，用于 URL hash
+    "id": "url-slug",              // 唯一标识，用于 URL hash
     "title": "文章标题",
     "date": "2026-07-08",
-    "file": "filename.md",   // 对应的 Markdown 文件名
+    "file": "articles/filename.md", // 相对于 resource/ 的路径
     "tags": ["标签1", "标签2"]
 }
 ```
 
 3. 刷新页面即可看到新文章
+
+## 在文章中引用媒体资源
+
+Markdown 文章内的引用路径相对于 `resource/` 根目录：
+
+- 图片：`![描述](images/photo.png)`
+- 音频：`<audio controls src="audio/bgm.mp3"></audio>`
+- 视频：`<video controls src="video/clip.mp4" width="100%"></video>`
+- 附件：`[下载](files/doc.pdf)`
 
 ## CSS 变量体系
 
