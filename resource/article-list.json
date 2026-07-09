@@ -19,5 +19,12 @@
         "date": "2026-07-08",
         "file": "articles/对于学习的思考.md",
         "tags": ["随笔", "学习"]
+    },
+    {
+        "id": "thoughts-on-mathematics",
+        "title": "数学方法的反思",
+        "date": "2026-07-09",
+        "file": "articles/数学立誓.md",
+        "tags": ["随笔", "数学"] 
     }
 ]
